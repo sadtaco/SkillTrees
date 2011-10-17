@@ -26,6 +26,6 @@ public class ServerChatPlayerListener extends PlayerListener {
 	public void onPlayerJoin(PlayerJoinEvent event){
 		Player p = event.getPlayer();
 		p.sendMessage("Gui test.");
-		Gui.skillHint();
+		Gui.skillHint(p);
 	}
 }

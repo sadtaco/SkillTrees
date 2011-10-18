@@ -1,3 +1,4 @@
-name: Skill Trees
+name: SkillTrees
 version: 0.1
 main: me.sadtaco.SkillTrees.SkillTrees
+depend: [Spout]

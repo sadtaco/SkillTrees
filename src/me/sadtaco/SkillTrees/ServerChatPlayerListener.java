@@ -9,7 +9,7 @@ import org.bukkit.event.player.PlayerListener;
 public class ServerChatPlayerListener extends PlayerListener {
 	
 	public static SkillTrees plugin;
-	public final SkillsGui Gui = new SkillsGui(this);
+	public final SkillsGui gui = new SkillsGui(plugin);
 	
 	public ServerChatPlayerListener(SkillTrees instance){
 		plugin = instance;
@@ -25,7 +25,6 @@ public class ServerChatPlayerListener extends PlayerListener {
 	
 	public void onPlayerJoin(PlayerJoinEvent event){
 		Player p = event.getPlayer();
-		p.sendMessage("Gui test.");
-		Gui.skillHint(p);
+		gui.skillHint(p);
 	}
 }

@@ -1,16 +1,15 @@
 package me.sadtaco.SkillTrees;
 
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.getspout.spoutapi.SpoutManager;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
 import org.getspout.spoutapi.gui.Color;
 import org.getspout.spoutapi.gui.GenericButton;
 import org.getspout.spoutapi.gui.GenericGradient;
-import org.getspout.spoutapi.gui.GenericItemWidget;
 import org.getspout.spoutapi.gui.GenericLabel;
 import org.getspout.spoutapi.gui.GenericPopup;
+import org.getspout.spoutapi.gui.GenericTexture;
 import org.getspout.spoutapi.gui.RenderPriority;
 import org.getspout.spoutapi.gui.WidgetAnchor;
 
@@ -44,21 +43,24 @@ public class SkillsGui {
 		bg.setAnchor(WidgetAnchor.TOP_CENTER);
 		popup.attachWidget(getPlugin(), bg);
 		
-		GenericItemWidget itemwidget = new GenericItemWidget(new ItemStack(257)); //This makes it display Pickaxe
-		itemwidget.setHeight(25).setWidth(25).setDepth(1);
-		itemwidget.setTooltip("Mining Skills"); 
-		itemwidget.setX(-125).setY(15);
-		itemwidget.setAnchor(WidgetAnchor.TOP_CENTER);
-		popup.attachWidget(getPlugin(), itemwidget);
-		
 		GenericButton buttonSkill1 = new GenericButton("+");
 		buttonSkill1.setColor(new Color(1.0F, 1.0F, 0, 1.0F));
 		buttonSkill1.setHoverColor(new Color(1.0F, 0, 0, 1.0F));
-		buttonSkill1.setX(68).setY(15);
-		buttonSkill1.setWidth(25).setHeight(25); 
-		buttonSkill1.setAnchor(WidgetAnchor.TOP_LEFT);
+		buttonSkill1.setX(-145).setY(15);
+		buttonSkill1.setWidth(20).setHeight(16); 
+		buttonSkill1.setAnchor(WidgetAnchor.TOP_CENTER);
 		buttonSkill1.setPriority(RenderPriority.High);
+		buttonSkill1.setTooltip("Mining Skills");
 		popup.attachWidget(getPlugin(), buttonSkill1);
+		
+		GenericTexture texture = new GenericTexture();
+		texture.setUrl("Archery.png"); //Have to be a png or jpg
+		//texture.setUrl("http://www.google.com/intl/en_com/images/srpr/logo3w.png");
+		texture.setWidth(16).setHeight(16); //Use the same size as the png here.
+		texture.setX(-160).setY(17);
+		texture.setAnchor(WidgetAnchor.TOP_CENTER);
+		texture.setPriority(RenderPriority.Normal);
+		popup.attachWidget(getPlugin(), texture);
 		
 		sPlayer.getMainScreen().attachPopupScreen(popup);
 	}

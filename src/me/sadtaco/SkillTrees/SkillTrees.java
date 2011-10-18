@@ -42,20 +42,16 @@ public class SkillTrees extends JavaPlugin {
 	public void onEnable(){
 		description = getDescription();
 		server = getServer();
-		getDataFolder();
 		if (!hasSpout) {
 			hasSpout = server.getPluginManager().isPluginEnabled("Spout");
 		}
 		if (!folder && !getDataFolder().exists()) {
 			getDataFolder().mkdir();
 		}
-		else {
-			this.logger.info("Error with singleFolder");
-		}
 		
 		/*if (support.get(Support.MMO_AUTO_EXTRACT)) {
 			extractFile("^config.yml$");*/
-			extractFile("\\.(png|jpg|ogg|midi|wav|zip)$", true);
+			extractFile(".*\\.(png|jpg|ogg|midi|wav|zip)$", true);
 		//}
 		
 		PluginManager pm = getServer().getPluginManager();
@@ -86,28 +82,27 @@ public class SkillTrees extends JavaPlugin {
 	 * mmoMinecraft code
 	 */
 	public boolean extractFile(String regex, boolean cache) {
-		this.logger.info(regex);
 		boolean found = false;
 		try {
 			boolean folder = false;
 			JarFile jar = new JarFile(getFile());
-			Enumeration entries = jar.entries();
+			Enumeration<JarEntry> entries = jar.entries();
 			while (entries.hasMoreElements()) {
 				JarEntry jarentry = (JarEntry) entries.nextElement();
 				String name = jarentry.getName();
-				String ext = name.substring(name.length() - 3, name.length());
-				this.logger.info(ext);
-				if (/*name.matches(regex)*/ ext == "png" ) {
-					this.logger.info("matches");
+				if (name.matches(regex)) {
+					this.logger.info(name);
 					if (!folder) {
-						new File(getDataFolder(), description.getName()).mkdir();
+						File resources = new File(getDataFolder(), "resources");
+						if( !resources.exists() )
+							new File(getDataFolder(), "resources").mkdir();
 						folder = true;
 					}
 					if (folder && name.equals("config.yml")) {
 						name = description.getName() + ".yml";
 					}
 					try {
-						File file = new File(getDataFolder(), description.getName() + File.separator + name);
+						File file = new File(getDataFolder(), "resources" + File.separator + name);
 						if (!file.exists()) {
 							InputStream is = jar.getInputStream(jarentry);
 							FileOutputStream fos = new FileOutputStream(file);
@@ -118,8 +113,8 @@ public class SkillTrees extends JavaPlugin {
 							is.close();
 							found = true;
 						}
-						if (hasSpout && cache && name.matches("\\.(txt|yml|xml|png|jpg|ogg|midi|wav|zip)$")) {
-							SpoutManager.getFileManager().addToCache(plugin, file);
+						if (hasSpout && cache && name.matches(regex)) {
+							SpoutManager.getFileManager().addToCache(this, file);
 						}
 					} catch (Exception e) {
 					}

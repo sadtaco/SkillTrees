@@ -21,10 +21,10 @@ public class SkillTrees extends JavaPlugin {
 	
 	public static SkillTrees plugin;
 	
-	public final Logger logger = Logger.getLogger("Minecraft");
-	public final ServerChatPlayerListener playerListener = new ServerChatPlayerListener(this);
-	public final SkillsKeyboardListener keyboardListener = new SkillsKeyboardListener(this);
-	
+	public ServerChatPlayerListener playerListener;
+	public SkillsKeyboardListener keyboardListener;
+	public SkillsGuiButtonEvents screenListener;
+	public final Logger logger = Logger.getLogger("Minecraft");	
 	
 	static public boolean hasSpout = false;
 	static public boolean folder = false;
@@ -34,14 +34,14 @@ public class SkillTrees extends JavaPlugin {
 	
 	@Override
 	public void onDisable(){
-		PluginDescriptionFile pdfFile = this.getDescription();
-		this.logger.info(pdfFile.getName() + " is now disabled.");
+		this.logger.info(description.getName() + " is now disabled.");
 	}
 	
 	@Override
 	public void onEnable(){
 		description = getDescription();
 		server = getServer();
+		plugin = this;
 		if (!hasSpout) {
 			hasSpout = server.getPluginManager().isPluginEnabled("Spout");
 		}
@@ -54,10 +54,14 @@ public class SkillTrees extends JavaPlugin {
 			extractFile(".*\\.(png|jpg|ogg|midi|wav|zip)$", true);
 		//}
 		
+		playerListener = new ServerChatPlayerListener();
+		keyboardListener = new SkillsKeyboardListener();
+		screenListener = new SkillsGuiButtonEvents();
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvent(Type.PLAYER_CHAT, this.playerListener, Priority.Normal, this);
 		pm.registerEvent(Type.PLAYER_JOIN, this.playerListener, Priority.Normal, this);
 		pm.registerEvent(Type.CUSTOM_EVENT, this.keyboardListener, Priority.Normal, this);
+		pm.registerEvent(Type.CUSTOM_EVENT, this.screenListener, Priority.Normal, this);
 		
 		//PluginDescriptionFile pdfFile = this.getDescription();
 		this.logger.info(description.getName() + " version " + description.getVersion() + " is now enabled.");
@@ -91,7 +95,7 @@ public class SkillTrees extends JavaPlugin {
 				JarEntry jarentry = (JarEntry) entries.nextElement();
 				String name = jarentry.getName();
 				if (name.matches(regex)) {
-					this.logger.info(name);
+					//this.logger.info(name);
 					if (!folder) {
 						File resources = new File(getDataFolder(), "resources");
 						if( !resources.exists() )
@@ -114,7 +118,7 @@ public class SkillTrees extends JavaPlugin {
 							found = true;
 						}
 						if (hasSpout && cache && name.matches(regex)) {
-							SpoutManager.getFileManager().addToCache(this, file);
+							SpoutManager.getFileManager().addToCache(plugin, file);
 						}
 					} catch (Exception e) {
 					}

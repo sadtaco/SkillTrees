@@ -1,27 +1,30 @@
 package me.sadtaco.SkillTrees;
 
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 import org.getspout.spoutapi.event.input.InputListener;
 import org.getspout.spoutapi.event.input.KeyReleasedEvent;
+import org.getspout.spoutapi.gui.Screen;
 import org.getspout.spoutapi.keyboard.Keyboard;
+import org.getspout.spoutapi.player.SpoutPlayer;
 
 public class SkillsKeyboardListener extends InputListener {
 	
-	public static SkillTrees plugin;
-	public final SkillsGui gui = new SkillsGui(plugin);
+	private static SkillTrees plugin;
+	private static SkillsGui gui;
 	
-	public SkillsKeyboardListener(SkillTrees instance){
-		plugin = instance;
+	public SkillsKeyboardListener(){
+		plugin = SkillTrees.plugin;
+		gui = new SkillsGui(plugin);
 	}
 	
     @Override
     public void onKeyReleasedEvent(KeyReleasedEvent event) {
     	if( event.getKey() == Keyboard.KEY_K ){
-    		Player p = event.getPlayer();
-    		p.sendMessage(ChatColor.RED + "[Server] " + ChatColor.WHITE + "You pressed K.");
-    		
-    		gui.openSkillTree(p);
+    		SpoutPlayer p = event.getPlayer();
+    		Screen screen = p.getMainScreen();
+    		if( gui.skillTreeIsOpen(screen) )
+    			gui.closeSkillTree();
+    		else
+    			gui.openSkillTree(p);
     	}
     }
 }

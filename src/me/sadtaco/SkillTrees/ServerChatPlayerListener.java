@@ -8,11 +8,12 @@ import org.bukkit.event.player.PlayerListener;
 
 public class ServerChatPlayerListener extends PlayerListener {
 	
-	public static SkillTrees plugin;
-	public final SkillsGui gui = new SkillsGui(plugin);
+	private static SkillTrees plugin;
+	private static SkillsGui gui;
 	
-	public ServerChatPlayerListener(SkillTrees instance){
-		plugin = instance;
+	public ServerChatPlayerListener(){
+		plugin = SkillTrees.plugin;
+		gui = new SkillsGui(plugin);
 	}
 	
 	public void onPlayerChat(PlayerChatEvent event){
